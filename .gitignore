@@ -1,0 +1,29 @@
+# --- Keil MDK build output directories ---
+MDK-ARM/2024gongxun/
+MDK-ARM/2026gongxun/
+MDK-ARM/DebugConfig/
+MDK-ARM/RTE/
+MDK-ARM/EventRecorderStub.scvd
+
+# --- Build artifacts (any location) ---
+*.o
+*.crf
+*.d
+*.axf
+*.hex
+*.map
+*.htm
+*.lnp
+*.sct
+*.dep
+*.lst
+*.bak
+
+# --- IDE / editor ---
+.claude/
+.vscode/
+*.uvguix.*
+
+# --- OS junk ---
+Thumbs.db
+.DS_Store
