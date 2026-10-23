@@ -4,6 +4,7 @@
 
 motor_t motor[MOTOR_NUM];
 volatile int16_t motor_speed_set[MOTOR_NUM] = {0, 0, 0, 0};
+volatile uint8_t motor_enabled = 0;
 
 
 static void set_motor_pwm(TIM_HandleTypeDef *htim, uint32_t ch_in1, uint32_t ch_in2, int16_t pwm)
@@ -41,9 +42,30 @@ void Set_Pwm(const int16_t pwms[MOTOR_NUM])
     set_motor_pwm(&htim4, TIM_CHANNEL_3, TIM_CHANNEL_4, pwms[3]);
 }
 
+void Motor_SetEnabled(uint8_t enabled)
+{
+    uint32_t mask = __get_PRIMASK();
+    const int16_t zero[MOTOR_NUM] = {0, 0, 0, 0};
+    __disable_irq();
+    motor_enabled = enabled != 0;
+    if (!motor_enabled)
+    {
+        for (int i = 0; i < MOTOR_NUM; i++)
+        {
+            motor_speed_set[i] = 0;
+            motor[i].target = 0;
+            motor[i].out = 0;
+            PID_clear(&motor[i].speed_pid);
+        }
+        Set_Pwm(zero);
+    }
+    __set_PRIMASK(mask);
+}
+
 void DC_Motor_Init(void)
 {
     fp32 pid_param[3] = {SPEED_KP, SPEED_KI, SPEED_KD};
+    motor_enabled = 0;
 
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
@@ -53,10 +75,6 @@ void DC_Motor_Init(void)
     HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
     HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
     HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
-
-    HAL_TIM_Encoder_Start(&htim8, TIM_CHANNEL_ALL);   
-    HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_ALL);   
-
 
     Software_Encoder_Init();
 
@@ -84,6 +102,13 @@ void Speed_Control_Loop(void)
     for (int i = 0; i < MOTOR_NUM; i++)
     {
         enc_acc[i] += Read_Encoder(i);  
+    }
+
+    if (!motor_enabled)
+    {
+        for (int i = 0; i < MOTOR_NUM; i++) enc_acc[i] = 0;
+        tick = 0;
+        return;
     }
 
     if (++tick < SPEED_PID_DECIMATION)

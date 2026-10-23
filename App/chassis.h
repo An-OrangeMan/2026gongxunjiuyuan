@@ -19,7 +19,7 @@
 #define ENC_COUNTS_PER_REV      (MOTOR_ENCODER_PPR * MOTOR_GEAR_RATIO * ENCODER_MULT)
 #define SPEED_MAX_CNT           (ENC_COUNTS_PER_REV * MOTOR_NOLOAD_RPM / 60.0f / SPEED_LOOP_HZ)
 #define WHEEL_MAX_V_MPS         (3.14159265f * WHEEL_DIAMETER_M * MOTOR_NOLOAD_RPM / 60.0f)
-#define SPEED_KP                ((fp32)PWM_MAX * 0.60f / SPEED_MAX_CNT)
+#define SPEED_KP                ((fp32)PWM_MAX * 2.0f / SPEED_MAX_CNT)
 #define SPEED_KI                (SPEED_KP / 20.0f)
 #define SPEED_KD                0.0f
 #define SPEED_MAX_OUT           ((fp32)PWM_MAX)
@@ -27,6 +27,9 @@
 #define CHASSIS_MAX_SPEED       SPEED_MAX_CNT
 #define CHASSIS_TASK_TIMEOUT    5      
 #define CHASSIS_X_CHANNEL       3       
+/* 沿用下面原有的底盘通道定义，消除总头文件中的重复定义。 */
+#undef CHASSIS_Y_CHANNEL
+#undef CHASSIS_YAW_CHANNEL
 #define CHASSIS_Y_CHANNEL       2       
 #define CHASSIS_YAW_CHANNEL     0       
 #define CHASSIS_RC_RANGE        660.0f

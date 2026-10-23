@@ -25,7 +25,6 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include "servo.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -62,7 +61,6 @@ void MX_FREERTOS_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 /**
@@ -100,17 +98,16 @@ int main(void)
   MX_UART7_Init();
   MX_TIM2_Init();
   MX_TIM4_Init();
-  MX_TIM8_Init();
   MX_I2C2_Init();
   MX_SPI5_Init();
-  MX_TIM5_Init();
   MX_TIM6_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
   remote_control_init();
   DC_Motor_Init();
-	servo_target[0] = 180;
-	servo_target[1] = 180;
+	HAL_UART_Receive_IT(&huart6, &rece_data, 1);
+//	servo_target[0] = 180;
+//	servo_target[1] = 180;
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

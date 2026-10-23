@@ -24,8 +24,11 @@ typedef struct
 extern motor_t motor[MOTOR_NUM];
 /* 底盘任务写目标速度，TIM6 中断读（int16 在 Cortex-M4 上原子访问） */
 extern volatile int16_t motor_speed_set[MOTOR_NUM];
+extern volatile uint8_t motor_enabled;
 
 void DC_Motor_Init(void);
+/* 失能时立即清 PWM、轮速目标及速度 PID，速度中断不再驱动电机。 */
+void Motor_SetEnabled(uint8_t enabled);
 void Set_Pwm(const int16_t pwms[MOTOR_NUM]);
 void Speed_Control_Loop(void);   /* 在 TIM6 周期中断回调里调用 */
 

@@ -19,4 +19,6 @@
 #include "remote_control.h"
 #include "control.h"
 
+#include "imu_jy901p.h"
+
 #endif
