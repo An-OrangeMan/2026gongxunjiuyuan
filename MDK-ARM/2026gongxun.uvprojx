@@ -724,11 +724,6 @@
               <FilePath>..\App\chassis_yaw.c</FilePath>
             </File>
             <File>
-              <FileName>chassis_yaw.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\App\chassis_yaw.h</FilePath>
-            </File>
-            <File>
               <FileName>remote_control.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\App\remote_control.c</FilePath>
@@ -753,6 +748,11 @@
               <FileType>1</FileType>
               <FilePath>..\App\imu_jy901P.c</FilePath>
             </File>
+            <File>
+              <FileName>vision.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\vision.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -774,9 +774,6 @@
               <FilePath>..\Support\pid.c</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>::CMSIS</GroupName>
         </Group>
         <Group>
           <GroupName>Drivers/STM32F4xx_HAL_Driver</GroupName>
@@ -2549,6 +2546,9 @@
               </FileOption>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
     </Target>

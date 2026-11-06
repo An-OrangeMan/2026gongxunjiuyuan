@@ -35,5 +35,6 @@
 #define CHASSIS_RC_RANGE        660.0f
 
 void Chassis_task(void const *argument);
+void chassis_move_forward_decomposition(fp32 rate[4], fp32 vx, fp32 vy, fp32 wz);
 
 #endif

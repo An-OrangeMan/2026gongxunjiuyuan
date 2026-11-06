@@ -1,10 +1,11 @@
 #include "chassis.h"
 #include "control.h"
 #include "chassis_yaw.h"
+#include "vision.h"
 
 volatile int aa;
 
-static void chassis_move_forward_decomposition(fp32 rate[4], fp32 vx, fp32 vy, fp32 wz)
+void chassis_move_forward_decomposition(fp32 rate[4], fp32 vx, fp32 vy, fp32 wz)
 {
     
     rate[0] = -vx + vy + wz;       
@@ -24,8 +25,13 @@ void Chassis_task(void const *argument)
     Motor_SetEnabled(0);
     Chassis_Yaw_Init();
 
-    for (;;)
+    while(1)
     {
+        if (vision_active)
+        {
+            vTaskDelay(CHASSIS_TASK_TIMEOUT);
+            continue;
+        }
         mode = (uint8_t)rc->rc.s[1];
         if (mode != previous_mode)
         {

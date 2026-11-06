@@ -30,6 +30,7 @@
  * 用宏把 CubeMX 自动生成的那个改名（它不会被调用，只为能编译通过），
  * 放在 USER CODE 里，所以以后重新生成代码也不会被冲掉。 */
 #define USART1_IRQHandler USART1_IRQHandler_CubeMX
+void Vision_FeedByte(uint8_t b);   /* App/vision.c：UART7 收字节 */
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -331,7 +332,15 @@ void UART7_IRQHandler(void)
   /* USER CODE END UART7_IRQn 0 */
   HAL_UART_IRQHandler(&huart7);
   /* USER CODE BEGIN UART7_IRQn 1 */
-
+  if (huart7.Instance->SR & UART_FLAG_RXNE)
+  {
+      uint8_t b = (uint8_t)(huart7.Instance->DR & 0xFF);
+      Vision_FeedByte(b);
+  }
+  if (huart7.Instance->SR & (UART_FLAG_ORE | UART_FLAG_FE | UART_FLAG_NE))
+  {
+      (void)huart7.Instance->DR;
+  }
   /* USER CODE END UART7_IRQn 1 */
 }
 

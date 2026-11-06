@@ -28,7 +28,7 @@
 #include "head_file.h"
 #include "chassis.h"
 #include "servo.h"
-
+#include "vision.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,6 +56,7 @@ osThreadId defaultTaskHandle;
 /* USER CODE BEGIN FunctionPrototypes */
 osThreadId chassisTaskHandle;
 osThreadId servoTaskHandle;
+osThreadId visionTaskHandle;
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void const * argument);
@@ -117,6 +118,10 @@ void MX_FREERTOS_Init(void) {
 
   osThreadDef(servoTask, Servo_task, osPriorityBelowNormal, 0, 128);
   servoTaskHandle = osThreadCreate(osThread(servoTask), NULL);
+
+	osThreadDef(visionTask, Vision_task, osPriorityNormal, 0, 256);
+	visionTaskHandle = osThreadCreate(osThread(visionTask), NULL);
+
 
   /* USER CODE END RTOS_THREADS */
 
